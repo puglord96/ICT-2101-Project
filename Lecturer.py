@@ -16,3 +16,5 @@ class Lecturer:
         if self.isStud == False:
             self.rights = True
 
+
+

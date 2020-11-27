@@ -1,3 +1,4 @@
+# account factory need to verify user first? Actually do we really need an account factory, we not creating new classes
 class AccountFactory:
     def __init__(self, id, name, rights=False):
         self._id = id

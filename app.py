@@ -1,8 +1,7 @@
 # from flask import *
-from flask import Flask, request
-from flask import render_template
-from flask import session
+from flask import Flask, request, render_template, session, flash
 from flask_mysqldb import MySQL, MySQLdb
+from werkzeug.utils import redirect
 
 app = Flask(__name__)
 
@@ -45,14 +44,21 @@ def authenticate():
         user = cur.fetchone()
         cur.close()
 
-        if len(user) > 0:
-            session['UID'] = str(user['UID'])
-            session['name'] = str(user['name'])
-            if user['isStudent'] == 0:
-                session['role'] = 1     # Lecturer
-            else:
-                session['role'] = 0     # Student
-        return render_template('index.html')
+    if not user:
+        # Authenticate fail
+        flash('Admin Number does not exist!')
+        return render_template('authenticate.html')
+
+
+    session['UID'] = str(user['UID'])
+    session['name'] = str(user['name'])
+    if user['isStudent'] == 0:
+        session['role'] = 1     # Lecturer
+    else:
+        session['role'] = 0     # Student
+    return render_template('index.html')
+
+
 
 @app.route('/logout')
 def logout():

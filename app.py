@@ -2,7 +2,7 @@
 from flask import Flask, request, render_template, session, flash
 from flask_mysqldb import MySQL, MySQLdb
 
-import Account
+import AccountController
 
 app = Flask(__name__)
 
@@ -42,7 +42,7 @@ def authenticate():
 
     if request.method == "POST":
         # Account Object from AccountFactory
-        acc = Account.AccountFactory(request.form['uid'])
+        acc = AccountController.AccountFactory(request.form['uid'])
 
         # Account valid
         if acc.getValid():

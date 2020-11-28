@@ -22,16 +22,16 @@
 <!--        </li>-->
       </ul>
 
-
       <ul class="navbar-nav col col-lg-2 d-flex justify-content-center">
         <li class="nav-item active">
           {% if session['role'] == 0 %}
             <a class="nav-link"> Student </a>
           {% elif session['role'] == 1 %}
             <a class="nav-link"> Lecturer </a>
+          {% endif %}
         </li>
       </ul>
-      {% endif %}
+
 
       {% if session['UID'] %}
       <ul class="navbar-nav col col-lg-4 d-flex justify-content-end">

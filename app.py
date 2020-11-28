@@ -42,7 +42,7 @@ def authenticate():
 
     if request.method == "POST":
         # Account Object from AccountFactory
-        acc = account.AccountFactory(request.form['uid'])
+        acc = Account.AccountFactory(request.form['uid'])
 
         # Account valid
         if acc.getValid():

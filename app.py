@@ -59,5 +59,9 @@ def logout():
     session.clear()
     return render_template('authenticate.html')
 
+@app.route('/gamification')
+def gamification():
+    return render_template('gamification.html')
+
 if __name__ == '__main__':
     app.run()

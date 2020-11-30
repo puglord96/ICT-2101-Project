@@ -26,3 +26,5 @@ class Feedback:
         return self.frelation
     def setFeedbackRelation(self, fsender, freceiver):
         self.frelation.append(fsender+"," +freceiver)
+
+        

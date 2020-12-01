@@ -7,6 +7,8 @@ class Feedback:
         self.fsender = fsender
         self.freceiver = freceiver
         self.frelation = []
+        self.frelation.append(fsender)
+        self.frelation.append(freceiver)
 
     def getFeedbackID(self):
         return self.fid
@@ -14,7 +16,7 @@ class Feedback:
         return self.ftype
     def setFeedbackType(self, setFtype):
         self.ftype = setFtype
-    def getFeedbakTitle(self):
+    def getFeedbackTitle(self):
         return self.ftitle
     def setFeedbackTitle(self, setFtitle):
         self.ftitle = setFtitle

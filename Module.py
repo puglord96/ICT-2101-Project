@@ -55,21 +55,46 @@ class Component(ABC):
         pass
 
 
-class Leaf(Component):
-    """
-    The Leaf class represents the end objects of a composition. A leaf can't
-    have any children.
 
-    Usually, it's the Leaf objects that do the actual work, whereas Composite
-    objects only delegate to their sub-components.
-    """
+
+
+class Leaf(Component):
+    def __init__(self, id, name, weight=0.0):
+        self._id = id
+        self._name = name
+        self._weight = weight
+
+    def getComponentWeight(self):
+        return self._weight
+
+    def setComponentWeight(self, weight):
+        self._weight = weight
+
+    def getID(self):
+        return self.id
+
+    def setID(self, id):
+        self._id = id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, name):
+        self.name = name
 
     def operation(self) -> str:
         return "Leaf"
 
 
-class AssessmentLeaf():
-    def __init__(self, id, name):
+class Composite(Component):
+    """
+    The Composite class represents the complex components that may have
+    children. Usually, the Composite objects delegate the actual work to their
+    children and then "sum-up" the result.
+    """
+
+    def __init__(self,id="Master",name="Master") -> None:
+        self._children: List[Component] = []
         self._id = id
         self._name = name
 
@@ -83,18 +108,7 @@ class AssessmentLeaf():
         return self._name
 
     def setName(self, name):
-        self._name = name
-
-
-class Composite(Component):
-    """
-    The Composite class represents the complex components that may have
-    children. Usually, the Composite objects delegate the actual work to their
-    children and then "sum-up" the result.
-    """
-
-    def __init__(self) -> None:
-        self._children: List[Component] = []
+        self.name = name
 
     """
     A composite object can add or remove other components (both simple or
@@ -149,20 +163,23 @@ def client_code2(component1: Component, component2: Component) -> None:
 
 if __name__ == "__main__":
     # This way the client code can support the simple leaf components...
-    simple = Leaf()
+    simple = Leaf("0010","dsds")
     print("Client: I've got a simple component:")
     client_code(simple)
     print("\n")
 
     # ...as well as the complex composites.
-    Module = Composite()
+    ModuleCollection = Composite()
 
-    Assessment = Composite()
-    Assessment.add(Leaf())
-    Assessment.add(Leaf())
+    Module = Composite("ICT2101","Introduction to Software Engineering")
+    Assessment = Composite("0001","Module Project")
 
-    branch2 = Composite()
-    branch2.add(Leaf())
+    Assessment.add(Leaf("0001","Milestone 1",0.3))
+    Assessment.add(Leaf("0002","Milestone 2", 0.35))
 
     Module.add(Assessment)
-    Module.add(branch2)
+    ModuleCollection.add(Module)
+
+
+
+    print(ModuleCollection.getName())

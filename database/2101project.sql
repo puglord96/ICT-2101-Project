@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2020 at 08:03 AM
+-- Generation Time: Dec 02, 2020 at 05:42 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.8
 
@@ -72,9 +72,20 @@ CREATE TABLE `feedback` (
   `FType` varchar(45) DEFAULT NULL,
   `FTitle` varchar(45) DEFAULT NULL,
   `FContent` varchar(255) DEFAULT NULL,
-  `FSender` int(11) DEFAULT NULL,
-  `FReceiver` int(11) DEFAULT NULL
+  `FSender` int(7) NOT NULL,
+  `FReceiver` int(7) NOT NULL,
+  `FMod_code` int(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `feedback`
+--
+
+INSERT INTO `feedback` (`FID`, `FType`, `FTitle`, `FContent`, `FSender`, `FReceiver`, `FMod_code`) VALUES
+(1, 'General', 'Good Job', 'Good job on your work', 1001234, 1901000, 1001),
+(2, 'Summative', 'Test', 'Test', 1001234, 1901000, 1001),
+(3, 'Summative', 'Very Good', 'TTEEESSTT', 1001234, 1901001, 1002),
+(4, 'Summative', 'Summative Test', 'Test', 1001234, 1901003, 9999);
 
 -- --------------------------------------------------------
 
@@ -84,6 +95,7 @@ CREATE TABLE `feedback` (
 
 CREATE TABLE `module` (
   `MID` int(11) NOT NULL,
+  `mod_code` int(4) NOT NULL,
   `mod_name` varchar(50) NOT NULL,
   `UID` int(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -92,17 +104,23 @@ CREATE TABLE `module` (
 -- Dumping data for table `module`
 --
 
-INSERT INTO `module` (`MID`, `mod_name`, `UID`) VALUES
-(1001, 'Introduction to ICT', 1901000),
-(1002, 'Programming Fundamentals', 1901000),
-(1003, 'Computer Organisation and Architecture', 1901000),
-(1004, 'Web Systems and Technologies', 1901000),
-(1005, 'Mathematics and Staitstics for ICT', 1901000),
-(1006, 'ICT in Organisations', 1901000),
-(1007, 'Operating Systems', 1901000),
-(1008, 'Data Structures and Algorithms', 1901000),
-(1009, 'Object-Oriented Programming', 1901000),
-(1010, 'Computer Networks', 1901000);
+INSERT INTO `module` (`MID`, `mod_code`, `mod_name`, `UID`) VALUES
+(1, 1001, 'Introduction to ICT', 1901000),
+(2, 1002, 'Programming Fundamentals', 1901000),
+(3, 1003, 'Computer Organisation and Architecture', 1901000),
+(4, 1004, 'Web Systems and Technologies', 1901000),
+(5, 1005, 'Mathematics and Staitstics for ICT', 1901000),
+(6, 1006, 'ICT in Organisations', 1901000),
+(7, 1007, 'Operating Systems', 1901000),
+(8, 1008, 'Data Structures and Algorithms', 1901000),
+(9, 1009, 'Object-Oriented Programming', 1901000),
+(10, 1010, 'Computer Networks', 1901000),
+(11, 1001, 'Introduction to ICT', 1001234),
+(12, 1002, 'Programming Fundamentals', 1001234),
+(13, 1003, 'Computer Organisation and Architecture', 1001234),
+(14, 1001, 'Introduction to ICT', 1901001),
+(15, 1002, 'Programming Fundamentals', 1901001),
+(16, 1003, 'Computer Organisation and Architecture', 1001234);
 
 -- --------------------------------------------------------
 
@@ -221,13 +239,13 @@ ALTER TABLE `component`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `FID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `FID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112319;
 
 --
 -- AUTO_INCREMENT for table `module`
 --
 ALTER TABLE `module`
-  MODIFY `MID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1011;
+  MODIFY `MID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `result`

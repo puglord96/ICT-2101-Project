@@ -85,6 +85,25 @@ def logout():
 def gamification():
     return render_template('gamification.html')
 
+@app.route('/feedback')
+def feedback():
+    if session['role'] == 1:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT user.UID, user.name, user.email, module.mod_code FROM user INNER JOIN module ON user.UID = module.UID WHERE isStudent = 1;")
+        data = cur.fetchall()
+        return render_template('Lfeedback.html', data=data)
+    elif session['role'] == 0:
+        return render_template('Sfeedback.html')
 
+@app.route('/givefeedback')
+def givefeedback():
+    if session['role'] == 1:
+        cur = mysql.connection.cursor()
+        studid = request.form['uid']
+        modcode = request.form['mod_code']
+        cur.execute("")
+
+    else:
+        return render_template('Sfeedback.html')
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,19 +1,18 @@
 from Lecturer import Lecturer
 from flask_mysqldb import MySQL #for flask-mysqldb
-import mysql.connector
-from mysql.connector import errorcode
-# Test DB connector
-cnx = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='2101project')
-cursor = cnx.cursor()
+from flask import Flask
 
-query =("SELECT * FROM user where isStudent = 0")
-cursor.execute(query)
+app = Flask(__name__)
 
-for user in cursor:
-    print(user)
+# Database Config
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_HOST'] = '127.0.0.1'
+app.config['MYSQL_DB'] = '2101project'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['SECRET_KEY'] = b'6hc/_psp,./;2ZZx3c6_s,1//'
 
-cursor.close()
-cnx.close()
+mysql = MySQL(app)
 
 
 class LecturerController:

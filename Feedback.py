@@ -1,11 +1,12 @@
 class Feedback:
-    def __init__(self, fid, ftype, ftitle, fcontent, fsender, freceiver):
+    def __init__(self, fid, ftype, ftitle, fcontent, fsender, freceiver, fmod_code):
         self.fid = fid
         self.ftype = ftype
         self.ftitle = ftitle
         self.fcontent = fcontent
         self.fsender = fsender
         self.freceiver = freceiver
+        self.fmod_code = fmod_code
         self.frelation = []
         self.frelation.append(fsender)
         self.frelation.append(freceiver)

@@ -1,6 +1,7 @@
 from Lecturer import Lecturer
 from flask_mysqldb import MySQL #for flask-mysqldb
 from flask import Flask
+from Feedback import *
 
 app = Flask(__name__)
 
@@ -16,10 +17,27 @@ mysql = MySQL(app)
 
 
 class LecturerController:
+    def __init__(self, UID):
+        self.UID = UID
+
     def viewClass(self):
-        pass
-    def uploadStudent(self):
-       pass
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT user.UID, user.name, user.email, module.mod_code FROM user INNER JOIN module ON user.UID = module.UID WHERE isStudent = 1;")
+        data = cur.fetchall()
+
+        return data
+    def giveFb(self, FID, Ftype, FTitle, FContent, FSender, FReceiver, FMod_code ):
+        try:
+            cur = mysql.connection.cursor()
+
+            # sql = "INSERT INTO feedback (FID, FType, FTitle, FContent, FSender, FReceiver, FMod_code) VALUES (\'FID\',\'Ftype\',\'FTitle\',\'FContent\', \'FSender\',\'FReceiver\', \'FMod_code\')"
+            sql = "INSERT INTO feedback (FID, FType, FTitle, FContent, FSender, FReceiver, FMod_code) VALUES (%s,%s,%s,%s, %s, %s, %s);"
+            cur.execute(sql, (FID, Ftype, FTitle, FContent, FSender, FReceiver, FMod_code))
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            print("Problem inserting: " + str(e))
+            return False
 
     def uploadMark(self):
         pass
@@ -27,6 +45,8 @@ class LecturerController:
     def viewStudentMark(self):
         pass
 
+    def uploadStudent(self):
+        pass
 # Feedback will be a leaf of Lecturer
 # Mods_teach will be a branch of Student
 # Assessment next branch

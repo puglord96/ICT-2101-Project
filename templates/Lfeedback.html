@@ -27,36 +27,81 @@
 
   </head>
   <body class="text-center">
-    <div id="box">
-      <h1>Your Students</h1>
-    <div style="overflow-x:auto;">
-      <table id="myTable">
-        <thead>
-        <tr>
-          <th>UID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Module Code</th>
-          <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-          {% for row in data %}
-          <tr>
-            <td>{{row['UID']}}</td>
-            <td>{{row['name']}}</td>
-            <td>{{row['email']}}</td>
-            <td>{{row['mod_code']}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-            <script>
+  <div>
+  {% if data %}
+  <h1>Your Students</h1>
+
+  <div style="overflow-x:auto;">
+    <table id="myTable">
+      <thead>
+      <tr>
+        <th>UID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Module Code</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for row in data %}
+      <tr>
+        <td>{{row['UID']}}</td>
+        <td>{{row['name']}}</td>
+        <td>{{row['email']}}</td>
+        <td>{{row['mod_code']}}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <br/>
+    <!-- Trigger/Open The Modal -->
+    <button id="fbBtn">Give Feedback</button>
+
+    <!-- The Modal -->
+    <div id="fbModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <p>Have you ever wonder, what is it like to be a student at this time and age? If so, why do you still want to put us through it again, simply because you had suffer back then?</p>
+        <p>Give your feedbacks, stop dilly dallying</p>
+        <div id="fbform">
+        <form action="/giveFeedback" method="POST">
+          <table id="feedbacktable">
+            <thead>
+              <tr>
+                <th>Student ID*</th>
+                <th>Module Code</th>
+                <th colspan="3">Feedback Type*</th>
+                <th>Title*</th>
+                <th>Message*</th>
+              </tr>
+            </thead>
+            <tr>
+              <td><input type="text" name="studID" id="studID" maxlength="7" size="7" required></td>
+              <td><input type="text" name="mod_code" id="mod_code" maxlength="4" size="4"></td>
+              <td>General<br><input type="radio" name="ftype" id="general" value="General" required></td>
+              <td>Summative<br><input type="radio" name="ftype" id="summative" value="Summative"></td>
+              <td>Formative<br><input type="radio" name="ftype" id="formative" value="Formative"></td>
+              <td><input type="text" name="title" id="title"></td>
+              <td><textarea id="message" name="message" rows="4" cols="50"></textarea></td>
+            </tr>
+          </table>
+          <p><b><i>* = required field</i></b></p>
+          <br><button type="submit"><b>Submit</b></button>
+        </form>
+        </div>
+      </div>
+    </div> <!-- Modal Closing Tag -->
+
+    {% else %}
+    <h1>No Students Found</h1>
+    {% endif %}
+    <script>
     $(document).ready(function() {
        var span = 1;
        var prevTD = "";
        var prevTDVal = "";
-       $("#myTable tr td:nth-child(2)").each(function() { //for each first td in every tr
+       $("#myTable tr td:first-child").each(function() { //for each first td in every tr
           var $this = $(this);
           if ($this.text() == prevTDVal) { // check value of previous td text
              span++;
@@ -72,51 +117,66 @@
        });
     });
 </script>
-
-      <!-- Trigger/Open The Modal -->
-<button id="myBtn">Open Modal</button>
+  </div>
+<br>
+<!-- Trigger/Open The Modal -->
+<button id="upStudBtn">Upload Students Information</button>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="upStudModal" class="modal">
 
   <!-- Modal content -->
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Some text in the Modal..</p>
+    <p>Have you ever wonder, what is it like to be a student at this time and age? If so, why do you still want to put us through it again, simply because you had suffer back then?</p>
+    <p>Upload your students here man</p>
+    <div>
+      <form action="/uploadStudents">
+        <input id="studFile" type="file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+      </form>
+    </div>
   </div>
-
-</div>
-</div>
+</div> <!-- Modal Closing Tag -->
 <script>
-// Get the modal
-var modal = document.getElementById("myModal");
+    // FEEDBACK MODAL
+    var fbmodal = document.getElementById("fbModal");
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+    // Get the button that opens the modal
+    var fbbtn = document.getElementById("fbBtn");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+    // Get the <span> element that closes the modal
+    var fbspan = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
+    // When the user clicks the button, open the modal
+    fbbtn.onclick = function() {
+        fbmodal.style.display = "block";
+      }
+</script>
+<script>
+    // STUDENT UPLOAD MODAL
+    var studmodal = document.getElementById("upStudModal");
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
+    // Get the button that opens the modal
+    var studbtn = document.getElementById("upStudBtn");
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+    // Get the <span> element that closes the modal
+    var studspan = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    studbtn.onclick = function() {
+      studmodal.style.display = "block";
+      }
+
+     // When the user clicks anywhere outside of the modal, close it
+     window.onclick = function(event) {
+        if (event.target == studmodal) {
+          studmodal.style.display = "none";
+        }
+        if (event.target == fbmodal) {
+          fbmodal.style.display = "none";
+        }
+      }
 </script>
     {% include 'layout/footer.html' %}
+    </div>
   </body>
-
-
-
 </html>

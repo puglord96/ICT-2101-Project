@@ -1,7 +1,7 @@
 # from flask import *
 from flask import Flask, request, render_template, session, flash
 from flask_mysqldb import MySQL, MySQLdb
-
+from LecturerController import *
 import AccountController
 
 app = Flask(__name__)
@@ -88,21 +88,38 @@ def gamification():
 @app.route('/feedback')
 def feedback():
     if session['role'] == 1:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT user.UID, user.name, user.email, module.mod_code FROM user INNER JOIN module ON user.UID = module.UID WHERE isStudent = 1;")
-        data = cur.fetchall()
+        lectcon = LecturerController(session['UID'])
+        data = lectcon.viewClass()
+        # data = None
         return render_template('Lfeedback.html', data=data)
     elif session['role'] == 0:
         return render_template('Sfeedback.html')
 
-@app.route('/givefeedback')
+@app.route('/giveFeedback' ,methods=["POST"])
 def givefeedback():
-    if session['role'] == 1:
-        cur = mysql.connection.cursor()
-        studid = request.form['uid']
-        modcode = request.form['mod_code']
-        cur.execute("")
+    if session["role"] == 1:
+        studID = int(request.form["studID"])
+        if request.form["mod_code"] is not "":
+            mod_code = int(request.form["mod_code"])
+        else:
+            #mod code 9999 means no module tagged with this feedback
+            mod_code = 9999
+        ftype = request.form["ftype"]
+        title = request.form["title"]
+        message = request.form["message"]
+        lectID = int(session["UID"])
 
+        lectcon = LecturerController(lectID)
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT fid from feedback ORDER BY fid DESC LIMIT 1;")
+        result = cur.fetchone()
+        lastFID = result['fid'] + 1
+
+        dbresult = lectcon.giveFb(lastFID, ftype, title, message, lectID, studID, mod_code)
+        if dbresult is True:
+            return render_template('gamification.html')
+        else:
+            return render_template('index.html')
     else:
         return render_template('Sfeedback.html')
 if __name__ == '__main__':

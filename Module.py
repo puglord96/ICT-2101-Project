@@ -92,7 +92,7 @@ class Leaf(Component):
         self._mark = Mark
 
     def getWeight(self):
-        return self.weight
+        return self._weight
 
     def setWeight(self, weight):
         self._weight = weight
@@ -261,6 +261,28 @@ class moduleList:
 
     def fetchModules(self):
         return self._list
+
+
+    def getModuleName(self,MID):
+        for module in self._list:
+            if module.getID() == MID:
+                return module.getName()
+
+
+
+class assessment:
+    def __init__ (self, mid, name, type, weightage):
+        self._mid = mid
+        self._name = name
+        self._type = type
+        self._weightage = weightage
+
+    def add_assessment(self):
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        sql = 'INSERT INTO assessment (assessment_name, MID, type, weight) VALUES (%s, %s, %s %s)'
+        val = (self._mid, self._name, self._type, self._weightage)
+        cur.execute(sql, val)
+        mysql.connection.commit()
 
 
 #

@@ -6,6 +6,12 @@ body{
   width: 50%;
   margin: 0 auto;
 }
+
+.character{
+   width:120%;
+  height:80%;
+
+}
 @keyframes load{
   from {
     width: 0%

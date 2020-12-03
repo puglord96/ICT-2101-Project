@@ -18,24 +18,35 @@
     <!-- Custom styles for this template -->
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='stylesheets/style.css') }}">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='stylesheets/sticky-footer-navbar.css') }}">
-
+    <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    </style>
     {% include 'layout/navbar.html' %}
   </head>
 
   <body class="text-center">
-      <h1>Student View</h1>
-      <table id="myTable">
+
+      <table id="myTable" style="width:500px;">
       <thead>
       <tr>
-        <th>UID</th>
-
+        <th>Title</th>
+        <th>Type</th>
+        <th>Content</th>
+        <th>Module Code</th>
+        <th>FSender</th>
       </tr>
       </thead>
       <tbody>
       {% for row in data %}
       <tr>
+        <td>{{row['FTitle']}}</td>
+        <td>{{row['FType']}}</td>
         <td>{{row['FContent']}}</td>
-
+        <td>{{row['FMod_code']}}</td>
+          <td>{{row['FSender']}}</td>
       </tr>
       {% endfor %}
       </tbody>

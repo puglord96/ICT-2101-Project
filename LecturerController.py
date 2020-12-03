@@ -2,12 +2,14 @@ from Lecturer import Lecturer
 from flask_mysqldb import MySQL #for flask-mysqldb
 from flask import Flask
 from Feedback import *
+import csv
+import os
 
 app = Flask(__name__)
 
 # Database Config
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'sceptile101'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -22,11 +24,18 @@ class LecturerController:
         self.UID = UID
 
     def viewClass(self):
+        studList = []
         cur = mysql.connection.cursor()
-        cur.execute("SELECT user.UID, user.name, user.email, module.mod_code FROM user INNER JOIN module ON user.UID = module.UID WHERE isStudent = 1;")
-        data = cur.fetchall()
 
-        return data
+        # Get Results of Students if any
+        cur.execute("SELECT RID, UID, marks, CID FROM result")
+        resultdata = cur.fetchall()
+
+        # View students that are taking the module
+        #cur.execute("SELECT user.UID, user.name, user.email, module.mod_code FROM user INNER JOIN module ON user.UID = module.UID WHERE isStudent = 1;")
+        #data = cur.fetchall()
+
+        return resultdata
     def giveFb(self, FID, Ftype, FTitle, FContent, FSender, FReceiver, FMod_code ):
         try:
             cur = mysql.connection.cursor()
@@ -41,13 +50,40 @@ class LecturerController:
             return False
 
     def uploadMark(self):
+        # send marks into database
+
         pass
 
-    def viewStudentMark(self):
-        pass
+    def uploadStudent(self, csvString):
+        # upload student information
+        cur = mysql.connection.cursor()
+        entries = csvString.split('\n')
 
-    def uploadStudent(self):
-        pass
+        try:
+            for entry in entries:
+                part = entry.split(',')
+                value = []
+                for smallpart in part:
+                    value.append(smallpart)
+                sql = "INSERT INTO user (UID, name, isStudent, email) VALUES (%s,%s,%s, %s)"
+                cur.execute(sql, value)
+                print(value)
+                mysql.connection.commit()
+
+            return True
+        except Exception as e:
+            # print("Problem in: " + str(e))
+            return False
+
+
+
+
+
+
+
+
+
+
 # Feedback will be a leaf of Lecturer
 # Mods_teach will be a branch of Student
 # Assessment next branch

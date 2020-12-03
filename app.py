@@ -6,12 +6,8 @@ import AccountController
 
 app = Flask(__name__)
 
-<<<<<<< Updated upstream
-# Database Config
-=======
->>>>>>> Stashed changes
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'sceptile101'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -125,5 +121,18 @@ def givefeedback():
             return render_template('index.html')
     else:
         return render_template('Sfeedback.html')
+
+
+@app.route('/uploadStudents', methods=["POST"])
+def uploadStudents():
+    lectID = int(session["UID"])
+    lectcon = LecturerController(lectID)
+
+    file = request.files["studFile"]
+    fstring = file.read().decode("utf-8-sig")
+    lectcon.uploadStudent(fstring)
+
+    return render_template("gamification.html")
+
 if __name__ == '__main__':
     app.run(debug=True)

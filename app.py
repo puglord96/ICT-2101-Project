@@ -12,7 +12,7 @@ app = Flask(__name__)
 # Database Config
 
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_PASSWORD'] = 'sceptile101'
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -54,6 +54,7 @@ def assessment():
     for module in moduleArr:
         if module.getID() == MID:
             assessArr = module.getChildrenList()
+
     # for assessment in assessmentArr:
     #     print(assessment)
     return render_template('moduleAssessment.html', assessArr=assessArr, MID=MID)

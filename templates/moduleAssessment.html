@@ -1,11 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div>
+    <div class="col-md-3"></div>
+    <div class="col-md-9">
+        <h1>Projects</h1>
+    <hr>
 
 {% for assess in assessArr %}
-    <a href="/component?AID={{ assess.getID() }}">
+{#    <a href="/component?AID={{ assess.getID() }}">#}
         <p> {{ assess.getName() }}</p>
-</a>
+    <div class="bar learning" data-skill="ICT2101"></div>
+      <div class="bar back basic" data-skill="ICT2102"></div>
+      <div class="bar back intermediate" data-skill="ICT2103"></div>
+      <div class="bar front advanced" data-skill="ICT2104"></div>
+      <div class="bar front expert" data-skill="ICT2105"></div>
+{#</a>#}
     {% endfor %}
     </div>
 {% endblock content %}

@@ -26,7 +26,8 @@ class LecturerController:
         cur = mysql.connection.cursor()
 
         # Get Results of Students if any
-        cur.execute("SELECT RID, UID, marks, CID FROM result")
+        cur.execute("SELECT RID, r.UID, marks, c.description,m.mod_code FROM result r,component c,assessment a, module m where r.CID = c.CID AND c.AID = a.AID"
+                    " and a.MID=m.MID")
         resultdata = cur.fetchall()
 
         # View students that are taking the module

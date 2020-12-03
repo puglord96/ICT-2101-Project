@@ -1,31 +1,39 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div>
-    {% for module in moduleArr %}
-        <a href="/assessment?MID={{ module.getID() }}">
-        <p> {{ module.getName() }}</p>
-    {% endfor %}
-        </a>
+<div class="container">
+    <div class="col col-lg-6">
+        {% for module in moduleArr %}
+            <div class="row">
+            <a href="/assessment?MID={{ module.getID() }}">
+            <p> {{ module.getName() }}</p>
+                </div>
+        {% endfor %}
+            </a>
     </div>
 
+    <div class="col col-lg-6">
+    <!-- Trigger/Open The Modal -->
 
-<!-- Trigger/Open The Modal -->
-<button id="upMarksBtn">Upload Marks</button>
+    <button id="upMarksBtn">Upload Marks</button><br>
 
-<!-- The Modal -->
-<div id="upMarksModal" class="modal">
+    <!-- The Modal -->
+    <div id="upMarksModal" class="row modal">
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <p>Upload your Students' Marks here. (.csv only)</p>
-    <div>
-      <form action="/uploadMarks" method="POST" enctype="multipart/form-data">
-        <input name="marksFile" id="marksFile" type="file" accept=".csv"/>
-        <input type="submit" value="submit">
-      </form>
+      <!-- Modal content -->
+      <div class="modal-content">
+        <p>Upload your Students' Marks here. (.csv only)</p>
+        <div>
+          <form action="/uploadMarks" method="POST" enctype="multipart/form-data">
+            <input name="marksFile" id="marksFile" type="file" accept=".csv"/>
+            <input type="submit" value="submit">
+          </form>
+        </div>
+      </div><br>
+    </div> <!-- Modal Closing Tag -->
+        <button><a href="/add_assessment">Add Assessment</a></button><br>
+        <button><a href="/add_component">Add Component</a></button>
     </div>
-  </div>
-</div> <!-- Modal Closing Tag -->
+    </div>
 <script>
     // FEEDBACK MODAL
     var mModal = document.getElementById("upMarksModal");

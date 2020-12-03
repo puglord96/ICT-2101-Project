@@ -131,6 +131,18 @@ def logout():
 def gamification():
     return render_template('gamification.html')
 
+@app.route('/add_assessment')
+def addAssessment():
+    return render_template('add_assessment.html')
+
+@app.route('/add_component')
+def addComponent():
+    return render_template('add_component.html')
+
+@app.route('/edit_component')
+def editComponent():
+    return render_template('edit_component.html')
+
 @app.route('/feedback')
 def feedback():
     if session['role'] == 1:

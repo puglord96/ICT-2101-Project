@@ -24,20 +24,52 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
     {% include 'layout/navbar.html' %}
+    <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
 
+    #basetable {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+
+    }
+
+    #basetable td, #customers th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #basetable tr:nth-child(even){background-color: #f2f2f2;}
+
+    #basetable tr:hover {background-color: #ddd;}
+
+    #basetable th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      width:200px;
+      background-color: teal;
+      color: white;
+    }
+
+    </style>
   </head>
   <body class="text-center">
   <div>
   {% if data %}
-  <h1>Your Students' Marks</h1>
+
 
   <div style="overflow-x:auto;">
-    <table id="myTable">
+    <h1>Your Students' Marks</h1>
+    <table id="basetable">
       <thead>
+
       <tr>
-        <th>UID</th>
+        <th>Student ID</th>
         <th>Marks</th>
-        <th>CID</th>
+        <th>Component</th>
         <th>Module Code</th>
       </tr>
       </thead>
@@ -46,15 +78,15 @@
       <tr>
         <td>{{row['UID']}}</td>
         <td>{{row['marks']}}</td>
-        <td>{{row['CID']}}</td>
-        <td>1</td>
+        <td>{{row['description']}}</td>
+        <td>{{row['<mod_code></mod_code>']}}</td>
       </tr>
       {% endfor %}
       </tbody>
     </table>
     <br/>
     <!-- Trigger/Open The Modal -->
-    <button id="fbBtn">Give Feedback</button>
+    <div style="height:50px;"><button id="fbBtn" style="float:right;">Give Feedback</button><br></div>
 
     <!-- The Modal -->
     <div id="fbModal" class="modal">

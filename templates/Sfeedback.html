@@ -23,20 +23,45 @@
       border: 1px solid black;
       border-collapse: collapse;
     }
+
+    #basetable {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #basetable td, #customers th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #basetable tr:nth-child(even){background-color: #f2f2f2;}
+
+    #basetable tr:hover {background-color: #ddd;}
+
+    #basetable th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      width:500px;
+      background-color: teal;
+      color: white;
+    }
+
     </style>
     {% include 'layout/navbar.html' %}
   </head>
 
   <body class="text-center">
 
-      <table id="myTable" style="width:500px;">
+      <table id="basetable" style="width:1000px;">
       <thead>
       <tr>
         <th>Title</th>
         <th>Type</th>
-        <th>Content</th>
+        <th>Message</th>
         <th>Module Code</th>
-        <th>FSender</th>
+        <th>From</th>
       </tr>
       </thead>
       <tbody>
@@ -46,7 +71,7 @@
         <td>{{row['FType']}}</td>
         <td>{{row['FContent']}}</td>
         <td>{{row['FMod_code']}}</td>
-          <td>{{row['FSender']}}</td>
+        <td>{{row['name']}}</td>
       </tr>
       {% endfor %}
       </tbody>

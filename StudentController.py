@@ -47,7 +47,7 @@ class StudentController:
     def viewFeedback(self):
         cur = mysql.connection.cursor()
         cur.execute(
-            "SELECT * FROM feedback WHERE FReceiver=" + self.UID)
+            "SELECT * FROM feedback f, user u WHERE FReceiver=" + self.UID + " AND f.FSender = u.UID;")
         data = cur.fetchall()
 
         return data

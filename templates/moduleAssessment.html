@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div>
+{% for module in moduleArr %}
+    {% if module.getID() == MID %}
+        <p> {{ module.operation() }}</p>
+    {% endif %}
+    {% endfor %}
+    </div>
+{% endblock content %}

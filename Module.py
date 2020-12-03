@@ -15,19 +15,10 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = b'6hc/_psp,./;2ZZx3c6_s,1//'
 
 mysql = MySQL(app)
-print(mysql.connection.cursor(MySQLdb.cursors.DictCursor))
 
-class moduleList():
 
-    def __init__(self,uid):
-        self._uid = uid
-        self._list = []
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("SELECT * FROM module WHERE UID=" + self._uid)
-        self._list = cur.fetchall()
 
-    def fetchModules(self):
-        return self._list
+
 
 
 
@@ -121,16 +112,23 @@ class Composite(Component):
     children and then "sum-up" the result.
     """
 
-    def __init__(self,id="Master",name="Master") -> None:
+    def __init__(self,id="Master",name="Master",type="None") -> None:
         self._children: List[Component] = []
         self._id = id
         self._name = name
+        self._type = type
 
     def getID(self):
         return self._id
 
     def setID(self, id):
         self._id = id
+
+    def getType(self):
+        return self._type
+
+    def setType(self, type):
+        self._type = type
 
     def getName(self):
         return self._name
@@ -188,9 +186,64 @@ def client_code2(component1: Component, component2: Component) -> None:
 
     print(f"RESULT: {component1.operation()}", end="")
 
+class assessmentList:
+    def __init__(self, mid):
+        self._mid = mid
+        self._querylist = []
+
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM assessment WHERE MID=" + str(self._mid))
+        self._querylist = cur.fetchall()
+        cur.close()
+
+
+    def fetchModules(self):
+        return self._querylist
+
+class moduleList:
+
+    def __init__(self,uid):
+        self._uid = uid
+        self._list = []
+        self._querylist = []
+
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM module WHERE UID=" + str(self._uid))
+        self._querylist = cur.fetchall()
+        cur.close()
+
+        for query in self._querylist:
+            Module = Composite(query["MID"], str(query["mod_code"]) + " " + query["mod_name"])
+            if query["MID"]:
+                AssessmentList = assessmentList(query["MID"]).fetchModules()
+                for assessment in AssessmentList:
+                    AssessmentObj = Composite(assessment["AID"],assessment["assessment_name"],assessment["type"])
+                    Module.add(AssessmentObj)
+            self._list.append(Module)
+
+
+    def fetchModules(self):
+        return self._list
+
+
+
+class componentList:
+    def __init__(self,mid):
+        self._aid = mid
+        self._querylist = []
+
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("SELECT * FROM component WHERE AID=" + str(self._aid))
+        self._querylist = cur.fetchall()
+        cur.close()
+
+    def fetchModules(self):
+        return self._querylist
 
 if __name__ == "__main__":
     # This way the client code can support the simple leaf components...
+
+
     simple = Leaf("0010","dsds")
     print("Client: I've got a simple component:")
     client_code(simple)

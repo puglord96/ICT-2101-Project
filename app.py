@@ -3,11 +3,13 @@ from flask import Flask, request, render_template, session, flash
 from flask_mysqldb import MySQL, MySQLdb
 from LecturerController import *
 from StudentController import *
+from Module import *
 import AccountController
 
 app = Flask(__name__)
 
 # Database Config
+
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_HOST'] = '127.0.0.1'
@@ -32,6 +34,22 @@ def home():
     else:
         return render_template('authenticate.html')
 
+@app.route('/module')
+def module():
+    print(session.get('UID'))
+    moduleArr = moduleList(session.get('UID')).fetchModules()
+    # for module in moduleArr:
+    #     print(module)
+    return render_template('module.html', moduleArr=moduleArr)
+
+@app.route('/assessment',methods=["GET"])
+def assessment():
+    # print(session.get('UID'))
+    MID = request.args.get('MID')
+    moduleArr = moduleList(session.get('UID')).fetchModules()
+    # for assessment in assessmentArr:
+    #     print(assessment)
+    return render_template('moduleAssessment.html', moduleArr=moduleArr, MID=MID)
 
 @app.route('/authenticate', methods=["GET", "POST"])
 def authenticate():
@@ -54,6 +72,8 @@ def authenticate():
         else:   # Authenticate fail
             flash('Admin Number does not exist!')
             return render_template('authenticate.html')
+
+
 
     #     uid = request.form['uid']
     #     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)

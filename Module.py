@@ -86,10 +86,10 @@ class Leaf(Component):
 
 
     def getMark(self):
-        return self.Mark
+        return self._mark
 
     def setMark(self, Mark):
-        self._Mark = Mark
+        self._mark = Mark
 
     def getWeight(self):
         return self.weight

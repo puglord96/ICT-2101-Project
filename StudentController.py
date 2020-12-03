@@ -1,8 +1,8 @@
 from Student import Student
 from flask import Flask
 from flask_mysqldb import MySQL #for flask-mysqldb
-import mysql.connector
-from mysql.connector import errorcode
+#import mysql.connector
+#from mysql.connector import errorcode
 
 app = Flask(__name__)
 # Database Config

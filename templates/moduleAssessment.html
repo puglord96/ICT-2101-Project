@@ -1,27 +1,54 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="col-md-3"></div>
-    <div class="col-md-9">
-        <h1>Projects</h1>
-    <hr>
+    <div class="container">
+<div class="jumbotron" style="text-align: center">
+   <h2> {{ moduleName }} </h2>
+     <h4> Character Stats</h4>
+</div>
 
+   <div class="row" style="width:90%">
+{% set img = namespace(src="") %}
+
+    <div class="col-md-9">
+        <h2>Projects</h2>
+    <hr>
+{% set total = namespace(value=0)  %}
+        {% set imgnamearr = ["warrior-basic.png","warrior-intermediate.png","warrior-advanced.png","warrior-expert.png"] %}
+    {% set classnamearr = ["Peasant","Warrior-in-Training","Greater Warrior","Legendary Warrior"] %}
+    {% set barclassarr = ["bar","bar learning","bar basic","bar intermediate","bar advanced","bar expert"] %}
 {% for assess in assessArr %}
 
 {#    <a href="/component?AID={{ assess.getID() }}">#}
     {% set count = namespace(value=0) %}
-    {% set barclassarr = ["bar learning","bar basic","bar intermediate"] %}
+
+
     {% for component in assess.getChildrenList() %}
         {% set count.value = count.value + ((component.getMark()/50) * component.getWeight()) %}
-        {{ count.value }}
-
-        <p>{{component.getName()  }}</p>
+{#        {{ count.value }}#}
+{##}
+{#        <p>{{component.getName()  }}</p>#}
         {% endfor %}
     {% set barclass = namespace(value=0) %}
     {% set barclass.value = (count.value/20) | int() %}
-    <p> {{ barclass.value }}</p>
-        <p> {{ assess.getName() }}</p>
-      <div class="bar learning" data-skill="{{ assess.getName() }}"></div>
+{#        <p> {{ assess.getName() }}</p>#}
+      <div class="{{barclassarr[barclass.value]}}" data-skill="{{ assess.getName() }}" ></div>
+
+    {% set total.value = total.value + count.value %}
+
 {#</a>#}
+
     {% endfor %}
+    {% set img.src = imgnamearr[(total.value/100) | int()] %}
+
+    </div>
+       <div class="col-md-3">
+
+        <img src="static/images/{{ img.src }}" class="character">
+           <h4 style="margin-left:1em;text-align:center;">Level {{ ((total.value/400)*100) | int() }}</h4>
+           <p style="margin-left:1em;text-align:center;">{{ classnamearr[((total.value/100) | int())] }}</p>
+            <div class="{{barclassarr[((total.value/100) | int()) + 1]}}" style="width:100%;margin-left:1em;"></div>
+
+    </div>
+     </div>
     </div>
 {% endblock content %}

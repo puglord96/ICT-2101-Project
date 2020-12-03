@@ -49,6 +49,7 @@ def assessment():
     MID = int(request.args.get('MID'))
     session['MID'] = MID
     moduleArr = moduleList(session.get('UID')).fetchModules()
+    moduleName = moduleList(session.get('UID')).getModuleName(MID)
     assessArr = []
 
     for module in moduleArr:
@@ -57,7 +58,7 @@ def assessment():
 
     # for assessment in assessmentArr:
     #     print(assessment)
-    return render_template('moduleAssessment.html', assessArr=assessArr, MID=MID)
+    return render_template('moduleAssessment.html', assessArr=assessArr, MID=MID,moduleName = moduleName)
 
 @app.route('/component',methods=["GET"])
 def component():
@@ -177,7 +178,7 @@ def add_assessment():
     # moduleArr = moduleList(session.get('UID')).fetchModules()
     # for assessment in assessmentArr:
     return render_template('add_assessment.html', MID=MID)
-    
+
 @app.route('/viewFeedback' ,methods=["GET"])
 def viewfeedback():
     if session["role"] == 1:

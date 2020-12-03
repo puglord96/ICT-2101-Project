@@ -262,6 +262,12 @@ class moduleList:
     def fetchModules(self):
         return self._list
 
+    def getModuleName(self,MID):
+        for module in self._list:
+            if module.getID() == MID:
+                return module.getName()
+
+
 
 #
 # class componentList:

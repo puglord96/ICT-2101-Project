@@ -171,13 +171,42 @@ def givefeedback():
     else:
         return render_template('Sfeedback.html')
 
-@app.route('/add_assessment', methods=["GET"])
+@app.route('/add_assessment', methods=["GET","POST"])
 def add_assessment():
     # print(session.get('UID'))
     MID = request.args.get('MID')
+    if request.method == "POST":
+        details = request.form
+        ass_name = details["Assessment_name"]
+        ass_type = details["type"]
+        ass_weightage = details["weightage"]
+        ass_mid = details["MID"]
+        cur = mysql.connection.cursor()
+        cur.execute('INSERT INTO assessment (assessment_name, MID, type, weight) VALUES (%s, %s, %s ,%s)', (ass_name, ass_mid, ass_type, ass_weightage))
+        mysql.connection.commit()
+        cur.close()
+        return render_template('add_assessment.html', MID=MID)
     # moduleArr = moduleList(session.get('UID')).fetchModules()
     # for assessment in assessmentArr:
     return render_template('add_assessment.html', MID=MID)
+
+@app.route('/add_component', methods=["GET","POST"])
+def add_component():
+    # print(session.get('UID'))
+    AID = request.args.get('AID')
+    if request.method == "POST":
+        details = request.form
+        com_name = details["Component_name"]
+        com_weightage = details["weightage"]
+        com_aid = details["AID"]
+        cur = mysql.connection.cursor()
+        cur.execute('INSERT INTO component (description, AID, weight) VALUES (%s, %s, %s)', (com_name, com_aid, com_weightage))
+        mysql.connection.commit()
+        cur.close()
+        return render_template('add_component.html', AID=AID)
+    # moduleArr = moduleList(session.get('UID')).fetchModules()
+    # for assessment in assessmentArr:
+    return render_template('add_component.html', AID=AID)
 
 @app.route('/viewFeedback' ,methods=["GET"])
 def viewfeedback():

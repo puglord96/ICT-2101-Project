@@ -92,7 +92,7 @@ class Leaf(Component):
         self._mark = Mark
 
     def getWeight(self):
-        return self.weight
+        return self._weight
 
     def setWeight(self, weight):
         self._weight = weight

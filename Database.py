@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 from flask_mysqldb import MySQL, MySQLdb
 # from flask import Flask
 # app = Flask(__name__)
@@ -7,7 +7,7 @@ from flask_mysqldb import MySQL, MySQLdb
 #
 #
 #     def __init__(self):
-=======
+
 # from flask_mysqldb import MySQL, MySQLdb
 # from flask import Flask
 # app = Flask(__name__)
@@ -16,7 +16,7 @@ from flask_mysqldb import MySQL, MySQLdb
 #
 #
 #     def __init__(sel):
->>>>>>> Stashed changes
+
 #         app.config['MYSQL_USER'] = 'root'
 #         app.config['MYSQL_PASSWORD'] = 'sceptile101'
 #         app.config['MYSQL_HOST'] = '127.0.0.1'
@@ -26,8 +26,4 @@ from flask_mysqldb import MySQL, MySQLdb
 #
 #     def startConnection(self):
 #         return MySQL(app)
-<<<<<<< Updated upstream
 
-=======
-#
->>>>>>> Stashed changes

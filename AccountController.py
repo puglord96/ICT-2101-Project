@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 from flask import Flask
 from flask_mysqldb import MySQL, MySQLdb
 
@@ -12,7 +12,7 @@ app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = b'6hc/_psp,./;2ZZx3c6_s,1//'
 
-=======
+
 
 
 from Database import *
@@ -28,7 +28,7 @@ app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = b'6hc/_psp,./;2ZZx3c6_s,1//'
 
->>>>>>> Stashed changes
+
 mysql = MySQL(app)
 
 

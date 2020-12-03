@@ -7,10 +7,9 @@ import AccountController
 
 app = Flask(__name__)
 
-<<<<<<< Updated upstream
+
 # Database Config
-=======
->>>>>>> Stashed changes
+
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'sceptile101'
 app.config['MYSQL_HOST'] = '127.0.0.1'
@@ -46,11 +45,35 @@ def module():
 @app.route('/assessment',methods=["GET"])
 def assessment():
     # print(session.get('UID'))
-    MID = request.args.get('MID')
+    MID = int(request.args.get('MID'))
+    session['MID'] = MID
     moduleArr = moduleList(session.get('UID')).fetchModules()
+    assessArr = []
+
+    for module in moduleArr:
+        if module.getID() == MID:
+            assessArr = module.getChildrenList()
     # for assessment in assessmentArr:
     #     print(assessment)
-    return render_template('moduleAssessment.html', moduleArr=moduleArr, MID=MID)
+    return render_template('moduleAssessment.html', assessArr=assessArr, MID=MID)
+
+@app.route('/component',methods=["GET"])
+def component():
+    # print(session.get('UID'))
+    MID = session['MID']
+    AID = int(request.args.get('AID'))
+    moduleArr = moduleList(session.get('UID')).fetchModules()
+    assessArr = []
+    componentArr = []
+    for module in moduleArr:
+        if module.getID() == MID:
+            assessArr = module.getChildrenList()
+            for assess in assessArr:
+                if assess.getID() == AID:
+                    componentArr = assess.getChildrenList()
+    # for assessment in assessmentArr:
+    #     print(assessment)
+    return render_template('component.html', componentArr=componentArr, AID=AID)
 
 @app.route('/authenticate', methods=["GET", "POST"])
 def authenticate():

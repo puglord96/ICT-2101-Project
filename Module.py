@@ -78,15 +78,23 @@ class Component(ABC):
 
 
 class Leaf(Component):
-    def __init__(self, id, name, weight=0.0):
+    def __init__(self, id, name, weight=0.0,mark = 0.0):
         self._id = id
         self._name = name
         self._weight = weight
+        self._mark = mark
 
-    def getComponentWeight(self):
-        return self._weight
 
-    def setComponentWeight(self, weight):
+    def getMark(self):
+        return self.Mark
+
+    def setMark(self, Mark):
+        self._Mark = Mark
+
+    def getWeight(self):
+        return self.weight
+
+    def setWeight(self, weight):
         self._weight = weight
 
     def getID(self):
@@ -96,10 +104,10 @@ class Leaf(Component):
         self._id = id
 
     def getName(self):
-        return self.name
+        return self._name
 
     def setName(self, name):
-        self.name = name
+        self._name = name
 
     def operation(self) -> str:
         return "Leaf"
@@ -112,11 +120,13 @@ class Composite(Component):
     children and then "sum-up" the result.
     """
 
-    def __init__(self,id="Master",name="Master",type="None") -> None:
+    def __init__(self,id="Master",name="Master",type="None",weight='None') -> None:
         self._children: List[Component] = []
         self._id = id
         self._name = name
         self._type = type
+        self._weight = weight
+
 
     def getID(self):
         return self._id
@@ -136,6 +146,12 @@ class Composite(Component):
     def setName(self, name):
         self.name = name
 
+    def getWeight(self):
+        return self._weight
+
+    def setWeight(self, weight):
+        self.weight = weight
+
     """
     A composite object can add or remove other components (both simple or
     complex) to or from its child list.
@@ -151,6 +167,9 @@ class Composite(Component):
 
     def is_composite(self) -> bool:
         return True
+
+    def getChildrenList(self):
+        return self._children
 
     def operation(self) -> str:
         """
@@ -186,6 +205,21 @@ def client_code2(component1: Component, component2: Component) -> None:
 
     print(f"RESULT: {component1.operation()}", end="")
 
+class componentList:
+    def __init__(self, aid,uid):
+        self._aid = aid
+        self._uid = uid
+        self._querylist = []
+
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("select * from component c , result r where c.cid = r.cid and r.uid = %s and c.aid = %s",(self._uid,self._aid))
+        self._querylist = cur.fetchall()
+        cur.close()
+
+
+    def fetchModules(self):
+        return self._querylist
+
 class assessmentList:
     def __init__(self, mid):
         self._mid = mid
@@ -214,11 +248,14 @@ class moduleList:
 
         for query in self._querylist:
             Module = Composite(query["MID"], str(query["mod_code"]) + " " + query["mod_name"])
-            if query["MID"]:
-                AssessmentList = assessmentList(query["MID"]).fetchModules()
-                for assessment in AssessmentList:
-                    AssessmentObj = Composite(assessment["AID"],assessment["assessment_name"],assessment["type"])
-                    Module.add(AssessmentObj)
+            AssessmentList = assessmentList(query["MID"]).fetchModules()
+            for assessment in AssessmentList:
+                AssessmentObj = Composite(assessment["AID"],assessment["assessment_name"],assessment["type"],assessment["weight"])
+                ComponentArr = componentList(assessment["AID"],self._uid).fetchModules()
+                for component in ComponentArr:
+                    componentobj = Leaf(component["CID"],component["description"],component["weight"],component["marks"])
+                    AssessmentObj.add(componentobj)
+                Module.add(AssessmentObj)
             self._list.append(Module)
 
 
@@ -226,19 +263,19 @@ class moduleList:
         return self._list
 
 
-
-class componentList:
-    def __init__(self,mid):
-        self._aid = mid
-        self._querylist = []
-
-        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("SELECT * FROM component WHERE AID=" + str(self._aid))
-        self._querylist = cur.fetchall()
-        cur.close()
-
-    def fetchModules(self):
-        return self._querylist
+#
+# class componentList:
+#     def __init__(self,aid):
+#         self._aid = aid
+#         self._querylist = []
+#
+#         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#         cur.execute("SELECT * FROM component WHERE AID=" + str(self._aid))
+#         self._querylist = cur.fetchall()
+#         cur.close()
+#
+#     def fetchModules(self):
+#         return self._querylist
 
 if __name__ == "__main__":
     # This way the client code can support the simple leaf components...

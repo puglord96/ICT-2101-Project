@@ -18,9 +18,9 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='stylesheets/sticky-footer-navbar.css') }}">
 
       <style>
-          .container {
-              height: 500px;
-              width: 900px;
+          .form {
+              height: 550px;
+              width: 1000px;
               border-radius: 5px;
               background-color: #f2f2f2;
               padding: 20px;
@@ -31,30 +31,46 @@
 
   <body>
     <div class="container">
-        <form>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col">
-                        <label for="Assessment_Name">Assessment Name</label>
-                    </div>
-                    <div class="col">
-                        <input type="text" class="form-control" id="Assessment_Name" placeholder="Assessment Name">
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col">
+        <div class="row" style="padding:50px;">
+            <h1>Add Assessment</h1>
+        </div>
 
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                </div>
+        <form action="/add_assessment" method="post">
+          <div class="form-group row">
+            <label for="Assessment_name" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control form-control-sm" name="Assessment_name" id="Assessment_name" placeholder="Assessment Name">
             </div>
+          </div>
 
+          <div class="form-group row">
+            <label for="type" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control form-control-sm" name="type" id="type" placeholder="Type">
+            </div>
+          </div>
 
+          <div class="form-group row">
+            <label for="weightage" class="col-sm-2 col-form-label col-form-label-sm">Weightage</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control form-control-sm" name="weightage" id="weightage" placeholder="Weightage">
+            </div>
+          </div>
+
+          <div class="form-group row">
+              <input type="hidden" name="MID" id="MID" value="{{ MID }}">
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-10 d-flex justify-content-end">
+              <button class="btn btn-primary" type="submit">Add</button>
+            </div>
+          </div>
         </form>
     </div>
+
     {% include 'layout/footer.html' %}
   </body>
 

@@ -2,8 +2,6 @@ from Lecturer import Lecturer
 from flask_mysqldb import MySQL #for flask-mysqldb
 from flask import Flask
 from Feedback import *
-import csv
-import os
 
 app = Flask(__name__)
 
@@ -47,10 +45,27 @@ class LecturerController:
             print("Problem inserting: " + str(e))
             return False
 
-    def uploadMark(self):
+    def uploadMark(self, csvString):
         # send marks into database
+        cur = mysql.connection.cursor()
+        # split the multiple entries
+        entries = csvString.split('\r')
+        print(entries)
+        try:
+            for entry in entries:
+                part = entry.split(',')
+                values = []
 
-        pass
+                for small in part:
+                    values.append(small)
+                sql = "INSERT INTO result (UID, marks, CID) VALUES (%s, %s, %s)"
+                cur.execute(sql,values)
+                # print(value)
+                mysql.connection.commit()
+            return True
+        except Exception as e:
+            # print("Error in: " + str(e))
+            return False
 
     def uploadStudent(self, csvString):
         # upload student information
@@ -65,9 +80,8 @@ class LecturerController:
                     value.append(smallpart)
                 sql = "INSERT INTO user (UID, name, isStudent, email) VALUES (%s,%s,%s, %s)"
                 cur.execute(sql, value)
-                print(value)
+                # print(value)
                 mysql.connection.commit()
-
             return True
         except Exception as e:
             # print("Problem in: " + str(e))

@@ -7,4 +7,44 @@
     {% endfor %}
         </a>
     </div>
+
+
+<!-- Trigger/Open The Modal -->
+<button id="upMarksBtn">Upload Marks</button>
+
+<!-- The Modal -->
+<div id="upMarksModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <p>Upload your Students' Marks here. (.csv only)</p>
+    <div>
+      <form action="/uploadMarks" method="POST" enctype="multipart/form-data">
+        <input name="marksFile" id="marksFile" type="file" accept=".csv"/>
+        <input type="submit" value="submit">
+      </form>
+    </div>
+  </div>
+</div> <!-- Modal Closing Tag -->
+<script>
+    // FEEDBACK MODAL
+    var mModal = document.getElementById("upMarksModal");
+
+    // Get the button that opens the modal
+    var mBtn = document.getElementById("upMarksBtn");
+
+    // Get the <span> element that closes the modal
+    var mSpan = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    mBtn.onclick = function() {
+        mModal.style.display = "block";
+      }
+     // When the user clicks anywhere outside of the modal, close it
+     window.onclick = function(event) {
+        if (event.target == mModal) {
+          mModal.style.display = "none";
+        }
+    }
+</script>
 {% endblock content %}

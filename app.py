@@ -224,6 +224,23 @@ def uploadStudents():
             return render_template("module.html")
     else:
         return render_template("index.html")
+
+@app.route('/uploadMarks', methods=['POST'])
+def uploadMarks():
+    if session['role'] == 1:
+        lectID = int(session["UID"])
+        lectcon = LecturerController(lectID)
+
+        file = request.files["marksFile"]
+        filestr = file.read().decode("utf-8")
+        result = lectcon.uploadMark(filestr)
+        if result is True:
+            return render_template("module.html")
+        else:
+            return render_template("index.html")
+    else:
+        return render_template("index.html")
+
 @app.route('/AllFeed', methods=['POST', 'GET'])
 def LAllfeedback():
     if session['role']==1:

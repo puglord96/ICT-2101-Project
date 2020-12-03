@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> 1054f27f59143c3e651565d1768f6c0ddfa51270
 from flask import Flask
 from flask_mysqldb import MySQL, MySQLdb
 
@@ -14,12 +10,6 @@ app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = b'6hc/_psp,./;2ZZx3c6_s,1//'
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 1054f27f59143c3e651565d1768f6c0ddfa51270
 
 from Database import *
 from flask import *
@@ -34,10 +24,6 @@ app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SECRET_KEY'] = b'6hc/_psp,./;2ZZx3c6_s,1//'
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 1054f27f59143c3e651565d1768f6c0ddfa51270
 mysql = MySQL(app)
 
 

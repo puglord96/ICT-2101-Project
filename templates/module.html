@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div>
+    {% for module in moduleArr %}
+        <a href="/assessment?MID={{ module.getID() }}">
+        <p> {{ module.getName() }}</p>
+    {% endfor %}
+        </a>
+    </div>
+{% endblock content %}

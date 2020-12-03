@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div>
+
+{% for assess in assessArr %}
+    <a href="/component?AID={{ assess.getID() }}">
+        <p> {{ assess.getName() }}</p>
+</a>
+    {% endfor %}
+    </div>
+{% endblock content %}

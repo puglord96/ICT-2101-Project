@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 02, 2020 at 05:42 PM
--- Server version: 10.3.16-MariaDB
--- PHP Version: 7.3.8
+-- Host: 127.0.0.1:3306
+-- Generation Time: Dec 03, 2020 at 06:54 AM
+-- Server version: 5.7.31
+-- PHP Version: 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `2101project`
 --
+CREATE DATABASE IF NOT EXISTS `2101project` DEFAULT CHARACTER SET utf32 COLLATE utf32_unicode_ci;
+USE `2101project`;
 
 -- --------------------------------------------------------
 
@@ -28,10 +29,13 @@ SET time_zone = "+00:00";
 -- Table structure for table `assessment`
 --
 
-CREATE TABLE `assessment` (
-  `AID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `assessment`;
+CREATE TABLE IF NOT EXISTS `assessment` (
+  `AID` int(11) NOT NULL AUTO_INCREMENT,
   `assessment_name` varchar(100) NOT NULL,
-  `MID` int(11) NOT NULL
+  `MID` int(11) NOT NULL,
+  PRIMARY KEY (`AID`),
+  KEY `MID` (`MID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -40,12 +44,17 @@ CREATE TABLE `assessment` (
 -- Table structure for table `comment`
 --
 
-CREATE TABLE `comment` (
-  `COID` int(7) NOT NULL,
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE IF NOT EXISTS `comment` (
+  `COID` int(7) NOT NULL AUTO_INCREMENT,
   `comment` varchar(500) NOT NULL,
   `sender` int(7) NOT NULL,
   `receiver` int(7) NOT NULL,
-  `CID` int(7) DEFAULT NULL
+  `CID` int(7) DEFAULT NULL,
+  PRIMARY KEY (`COID`),
+  KEY `sender` (`sender`),
+  KEY `receiver` (`receiver`),
+  KEY `CID` (`CID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -54,11 +63,14 @@ CREATE TABLE `comment` (
 -- Table structure for table `component`
 --
 
-CREATE TABLE `component` (
-  `CID` int(7) NOT NULL,
+DROP TABLE IF EXISTS `component`;
+CREATE TABLE IF NOT EXISTS `component` (
+  `CID` int(7) NOT NULL AUTO_INCREMENT,
   `description` varchar(500) NOT NULL,
   `type` varchar(100) NOT NULL,
-  `AID` int(7) NOT NULL
+  `AID` int(7) NOT NULL,
+  PRIMARY KEY (`CID`),
+  KEY `AID` (`AID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -67,15 +79,17 @@ CREATE TABLE `component` (
 -- Table structure for table `feedback`
 --
 
-CREATE TABLE `feedback` (
-  `FID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `FID` int(11) NOT NULL AUTO_INCREMENT,
   `FType` varchar(45) DEFAULT NULL,
   `FTitle` varchar(45) DEFAULT NULL,
   `FContent` varchar(255) DEFAULT NULL,
   `FSender` int(7) NOT NULL,
   `FReceiver` int(7) NOT NULL,
-  `FMod_code` int(4) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `FMod_code` int(4) DEFAULT NULL,
+  PRIMARY KEY (`FID`)
+) ENGINE=InnoDB AUTO_INCREMENT=112319 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `feedback`
@@ -85,7 +99,8 @@ INSERT INTO `feedback` (`FID`, `FType`, `FTitle`, `FContent`, `FSender`, `FRecei
 (1, 'General', 'Good Job', 'Good job on your work', 1001234, 1901000, 1001),
 (2, 'Summative', 'Test', 'Test', 1001234, 1901000, 1001),
 (3, 'Summative', 'Very Good', 'TTEEESSTT', 1001234, 1901001, 1002),
-(4, 'Summative', 'Summative Test', 'Test', 1001234, 1901003, 9999);
+(4, 'Summative', 'Summative Test', 'Test', 1001234, 1901003, 9999),
+(5, 'Formative', 'Feedback', 'not bad', 1001234, 1901000, 1001);
 
 -- --------------------------------------------------------
 
@@ -93,12 +108,15 @@ INSERT INTO `feedback` (`FID`, `FType`, `FTitle`, `FContent`, `FSender`, `FRecei
 -- Table structure for table `module`
 --
 
-CREATE TABLE `module` (
-  `MID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `module`;
+CREATE TABLE IF NOT EXISTS `module` (
+  `MID` int(11) NOT NULL AUTO_INCREMENT,
   `mod_code` int(4) NOT NULL,
   `mod_name` varchar(50) NOT NULL,
-  `UID` int(7) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `UID` int(7) NOT NULL,
+  PRIMARY KEY (`MID`),
+  KEY `UID` (`UID`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `module`
@@ -128,11 +146,16 @@ INSERT INTO `module` (`MID`, `mod_code`, `mod_name`, `UID`) VALUES
 -- Table structure for table `result`
 --
 
-CREATE TABLE `result` (
-  `RID` int(7) NOT NULL,
+DROP TABLE IF EXISTS `result`;
+CREATE TABLE IF NOT EXISTS `result` (
+  `RID` int(7) NOT NULL AUTO_INCREMENT,
   `UID` int(7) NOT NULL,
   `marks` int(7) NOT NULL,
-  `CID` int(7) NOT NULL
+  `CID` int(7) NOT NULL,
+  PRIMARY KEY (`RID`),
+  KEY `CID` (`CID`),
+  KEY `UID` (`UID`),
+  KEY `CID_2` (`CID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -141,12 +164,14 @@ CREATE TABLE `result` (
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
-  `UID` int(7) NOT NULL,
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `UID` int(7) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `isStudent` tinyint(1) NOT NULL,
-  `email` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `email` varchar(100) NOT NULL,
+  PRIMARY KEY (`UID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1901003 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
@@ -157,107 +182,6 @@ INSERT INTO `user` (`UID`, `name`, `isStudent`, `email`) VALUES
 (1901000, 'John Lim Ko Pi', 1, '1901000@sit.singaporetech.edu.sg'),
 (1901001, 'Thomas Lam Mi Lo', 1, '1901001@sit.singaporetech.edu.sg'),
 (1901002, 'Ali Bin Abdul', 1, '1901002@sit.singaporetech.edu.sg');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `assessment`
---
-ALTER TABLE `assessment`
-  ADD PRIMARY KEY (`AID`),
-  ADD KEY `MID` (`MID`);
-
---
--- Indexes for table `comment`
---
-ALTER TABLE `comment`
-  ADD PRIMARY KEY (`COID`),
-  ADD KEY `sender` (`sender`),
-  ADD KEY `receiver` (`receiver`),
-  ADD KEY `CID` (`CID`);
-
---
--- Indexes for table `component`
---
-ALTER TABLE `component`
-  ADD PRIMARY KEY (`CID`),
-  ADD KEY `AID` (`AID`);
-
---
--- Indexes for table `feedback`
---
-ALTER TABLE `feedback`
-  ADD PRIMARY KEY (`FID`);
-
---
--- Indexes for table `module`
---
-ALTER TABLE `module`
-  ADD PRIMARY KEY (`MID`),
-  ADD KEY `UID` (`UID`);
-
---
--- Indexes for table `result`
---
-ALTER TABLE `result`
-  ADD PRIMARY KEY (`RID`),
-  ADD KEY `CID` (`CID`),
-  ADD KEY `UID` (`UID`),
-  ADD KEY `CID_2` (`CID`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`UID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `assessment`
---
-ALTER TABLE `assessment`
-  MODIFY `AID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `comment`
---
-ALTER TABLE `comment`
-  MODIFY `COID` int(7) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `component`
---
-ALTER TABLE `component`
-  MODIFY `CID` int(7) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `feedback`
---
-ALTER TABLE `feedback`
-  MODIFY `FID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112319;
-
---
--- AUTO_INCREMENT for table `module`
---
-ALTER TABLE `module`
-  MODIFY `MID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT for table `result`
---
-ALTER TABLE `result`
-  MODIFY `RID` int(7) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `UID` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1901003;
 
 --
 -- Constraints for dumped tables

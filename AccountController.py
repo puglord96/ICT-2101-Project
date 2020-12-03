@@ -1,4 +1,3 @@
-import mysql, MySQLdb
 from flask import Flask
 from flask_mysqldb import MySQL, MySQLdb
 

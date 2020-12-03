@@ -240,14 +240,71 @@ def viewfeedback():
 
 @app.route('/uploadStudents', methods=["POST"])
 def uploadStudents():
-    lectID = int(session["UID"])
-    lectcon = LecturerController(lectID)
+    if session['role'] == 1:
+        lectID = int(session["UID"])
+        lectcon = LecturerController(lectID)
 
-    file = request.files["studFile"]
-    fstring = file.read().decode("utf-8-sig")
-    lectcon.uploadStudent(fstring)
+        file = request.files["studFile"]
+        fstring = file.read().decode("utf-8-sig")
+        result = lectcon.uploadStudent(fstring)
+        if result is True:
+            return render_template("gamification.html")
+        else:
+            return render_template("module.html")
+    else:
+        return render_template("index.html")
 
-    return render_template("gamification.html")
+@app.route('/uploadMarks', methods=['POST'])
+def uploadMarks():
+    if session['role'] == 1:
+        lectID = int(session["UID"])
+        lectcon = LecturerController(lectID)
 
+        file = request.files["marksFile"]
+        filestr = file.read().decode("utf-8")
+        result = lectcon.uploadMark(filestr)
+        if result is True:
+            return render_template("module.html")
+        else:
+            return render_template("index.html")
+    else:
+        return render_template("index.html")
+
+@app.route('/AllFeed', methods=['POST', 'GET'])
+def LAllfeedback():
+    if session['role']==1:
+        lectID = session['UID']
+        if request.method== "GET":
+            lectcon = LecturerController(lectID)
+            data = lectcon.getAllFeedbacks()
+            return render_template("LAllFeedbacks.html", data=data)
+        else:
+            lectcon = LecturerController(lectID)
+
+    else:
+        return render_template("index.html")
+@app.route('/editFb', methods=["POST", "GET"])
+def editFb():
+    if session['role']==1:
+        lectID = session['UID']
+        lectcon = LecturerController(lectID)
+        if request.method== "POST":
+
+            ftype = request.form['type']
+            ftitle = request.form['title']
+            fcontent = request.form['message']
+            fid = request.form['fid']
+            success = lectcon.updateFeedback(fid, ftype, ftitle, fcontent)
+            if success == 1:
+                return render_template("editFeedback.html")
+            else:
+                return render_template("Lfeedback.html")
+        elif request.method == "GET":
+            fid = request.args.get('fid')
+            data = lectcon.getAllFeedbacks(fid)
+
+            return render_template("editFeedback.html", data=data)
+    else:
+        return render_template("index.html")
 if __name__ == '__main__':
     app.run(debug=True)

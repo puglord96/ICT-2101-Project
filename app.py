@@ -192,7 +192,7 @@ def add_assessment():
         ass_name = details["Assessment_name"]
         ass_type = details["type"]
         ass_weightage = details["weightage"]
-        ass_mid = details["MID"]
+        ass_mid = MID
         cur = mysql.connection.cursor()
         cur.execute('INSERT INTO assessment (assessment_name, MID, type, weight) VALUES (%s, %s, %s ,%s)', (ass_name, ass_mid, ass_type, ass_weightage))
         mysql.connection.commit()
@@ -318,5 +318,22 @@ def editFb():
             return render_template("editFeedback.html", data=data)
     else:
         return render_template("index.html")
+
+@app.route('/viewModule',methods=["GET"])
+def viewmod():
+    # print(session.get('UID'))
+    MID = int(request.args.get('MID'))
+    session['MID'] = MID
+    moduleArr = moduleList(session.get('UID')).fetchModules()
+    moduleName = moduleList(session.get('UID')).getModuleName(MID)
+    assessArr = []
+
+    for module in moduleArr:
+        if module.getID() == MID:
+            assessArr = module.getChildrenList()
+
+    # for assessment in assessmentArr:
+    #     print(assessment)
+    return render_template('moduleAssessment.html', assessArr=assessArr, MID=MID,moduleName = moduleName)
 if __name__ == '__main__':
     app.run(debug=True)

@@ -7,7 +7,10 @@ import AccountController
 
 app = Flask(__name__)
 
+<<<<<<< Updated upstream
 # Database Config
+=======
+>>>>>>> Stashed changes
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'sceptile101'
 app.config['MYSQL_HOST'] = '127.0.0.1'

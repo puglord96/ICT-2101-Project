@@ -10,7 +10,7 @@ app = Flask(__name__)
 # Database Config
 
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'sceptile101'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -142,5 +142,14 @@ def givefeedback():
             return render_template('index.html')
     else:
         return render_template('Sfeedback.html')
+
+@app.route('/add_assessment', methods=["GET"])
+def add_assessment():
+    # print(session.get('UID'))
+    MID = request.args.get('MID')
+    # moduleArr = moduleList(session.get('UID')).fetchModules()
+    # for assessment in assessmentArr:
+    return render_template('add_assessment.html', MID=MID)
+
 if __name__ == '__main__':
     app.run(debug=True)

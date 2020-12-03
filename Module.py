@@ -262,6 +262,19 @@ class moduleList:
     def fetchModules(self):
         return self._list
 
+class assessment:
+    def __init__ (self, mid, name, type, weightage):
+        self._mid = mid
+        self._name = name
+        self._type = type
+        self._weightage = weightage
+
+    def add_assessment(self):
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        sql = 'INSERT INTO assessment (assessment_name, MID, type, weight) VALUES (%s, %s, %s %s)'
+        val = (self._mid, self._name, self._type, self._weightage)
+        cur.execute(sql, val)
+        mysql.connection.commit()
 
 #
 # class componentList:

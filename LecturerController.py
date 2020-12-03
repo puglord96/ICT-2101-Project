@@ -39,8 +39,6 @@ class LecturerController:
     def giveFb(self, FID, Ftype, FTitle, FContent, FSender, FReceiver, FMod_code ):
         try:
             cur = mysql.connection.cursor()
-
-            # sql = "INSERT INTO feedback (FID, FType, FTitle, FContent, FSender, FReceiver, FMod_code) VALUES (\'FID\',\'Ftype\',\'FTitle\',\'FContent\', \'FSender\',\'FReceiver\', \'FMod_code\')"
             sql = "INSERT INTO feedback (FID, FType, FTitle, FContent, FSender, FReceiver, FMod_code) VALUES (%s,%s,%s,%s, %s, %s, %s);"
             cur.execute(sql, (FID, Ftype, FTitle, FContent, FSender, FReceiver, FMod_code))
             mysql.connection.commit()
@@ -75,7 +73,35 @@ class LecturerController:
             # print("Problem in: " + str(e))
             return False
 
+    def getAllFeedbacks(self, type="all"):
+        cur = mysql.connection.cursor()
+        if type =="all":
+            try:
+                sql = "SELECT * FROM Feedback WHERE FSender = " + self.UID + ";"
+                cur.execute(sql)
+                data = cur.fetchall()
+                return data
+            except Exception as e:
+                print("Error in: " + str(e))
+        else:
+            try:
+                sql = "SELECT * from Feedback WHERE FSender = " + self.UID + " AND FID = " + type + ";"
+                cur.execute(sql)
+                data = cur.fetchall()
+                return data
+            except Exception as e:
+                print("Error in: " + str(e))
 
+    def updateFeedback(self, fid, ftype, ftitle, fcontent):
+        cur = mysql.connection.cursor()
+        try:
+            sql = "UPDATE feedback SET FType = %s, FTitle = %s, FContent = %s WHERE FID = %s"
+            cur.execute(sql, (ftype, ftitle, fcontent, fid))
+            mysql.connection.commit()
+            return True
+        except Exception as e:
+            print("Error in :" + str(e))
+            return False
 
 
 

@@ -95,3 +95,7 @@ table {
   text-decoration: none;
   cursor: pointer;
 }
+#feedbacktable {
+    background: white;
+    border: 1px solid black
+}

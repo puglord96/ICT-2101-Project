@@ -1,20 +1,13 @@
 # from flask import *
-from flask import Flask, request, render_template, session, flash
+from flask import request, render_template, session, flash
 from flask_mysqldb import MySQL, MySQLdb
 from LecturerController import *
+from Database import *
 import AccountController
 
-app = Flask(__name__)
 
-# Database Config
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'sceptile101'
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_DB'] = '2101project'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-app.config['SECRET_KEY'] = b'6hc/_psp,./;2ZZx3c6_s,1//'
 
-mysql = MySQL(app)
+mysql = SQL.startConnection()
 
 
 @app.route('/')

@@ -2,10 +2,12 @@
 from flask import Flask, request, render_template, session, flash
 from flask_mysqldb import MySQL, MySQLdb
 from LecturerController import *
+from StudentController import *
 from Module import *
 import AccountController
 
 app = Flask(__name__)
+
 
 # Database Config
 
@@ -44,11 +46,36 @@ def module():
 @app.route('/assessment',methods=["GET"])
 def assessment():
     # print(session.get('UID'))
-    MID = request.args.get('MID')
+    MID = int(request.args.get('MID'))
+    session['MID'] = MID
     moduleArr = moduleList(session.get('UID')).fetchModules()
+    assessArr = []
+
+    for module in moduleArr:
+        if module.getID() == MID:
+            assessArr = module.getChildrenList()
+
     # for assessment in assessmentArr:
     #     print(assessment)
-    return render_template('moduleAssessment.html', moduleArr=moduleArr, MID=MID)
+    return render_template('moduleAssessment.html', assessArr=assessArr, MID=MID)
+
+@app.route('/component',methods=["GET"])
+def component():
+    # print(session.get('UID'))
+    MID = session['MID']
+    AID = int(request.args.get('AID'))
+    moduleArr = moduleList(session.get('UID')).fetchModules()
+    assessArr = []
+    componentArr = []
+    for module in moduleArr:
+        if module.getID() == MID:
+            assessArr = module.getChildrenList()
+            for assess in assessArr:
+                if assess.getID() == AID:
+                    componentArr = assess.getChildrenList()
+    # for assessment in assessmentArr:
+    #     print(assessment)
+    return render_template('component.html', componentArr=componentArr, AID=AID)
 
 @app.route('/authenticate', methods=["GET", "POST"])
 def authenticate():
@@ -71,8 +98,6 @@ def authenticate():
         else:   # Authenticate fail
             flash('Admin Number does not exist!')
             return render_template('authenticate.html')
-
-
 
     #     uid = request.form['uid']
     #     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -113,7 +138,9 @@ def feedback():
         # data = None
         return render_template('Lfeedback.html', data=data)
     elif session['role'] == 0:
-        return render_template('Sfeedback.html')
+        studcon = StudentController(session['UID'])
+        data = studcon.viewFeedback()
+        return render_template('Sfeedback.html',  data=data)
 
 @app.route('/giveFeedback' ,methods=["POST"])
 def givefeedback():
@@ -150,6 +177,47 @@ def add_assessment():
     # moduleArr = moduleList(session.get('UID')).fetchModules()
     # for assessment in assessmentArr:
     return render_template('add_assessment.html', MID=MID)
+    
+@app.route('/viewFeedback' ,methods=["GET"])
+def viewfeedback():
+    if session["role"] == 1:
+        studID = int(request.form["studID"])
+        if request.form["mod_code"] is not "":
+            mod_code = int(request.form["mod_code"])
+        else:
+            #mod code 9999 means no module tagged with this feedback
+            mod_code = 9999
+        ftype = request.form["ftype"]
+        title = request.form["title"]
+        message = request.form["message"]
+        lectID = int(session["UID"])
+
+        lectcon = LecturerController(lectID)
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT fid from feedback ORDER BY fid DESC LIMIT 1;")
+        result = cur.fetchone()
+        lastFID = result['fid'] + 1
+
+        dbresult = lectcon.giveFb(lastFID, ftype, title, message, lectID, studID, mod_code)
+        if dbresult is True:
+            return render_template('gamification.html')
+        else:
+            return render_template('index.html')
+    else:
+        return render_template('Sfeedback.html')
+
+
+
+@app.route('/uploadStudents', methods=["POST"])
+def uploadStudents():
+    lectID = int(session["UID"])
+    lectcon = LecturerController(lectID)
+
+    file = request.files["studFile"]
+    fstring = file.read().decode("utf-8-sig")
+    lectcon.uploadStudent(fstring)
+
+    return render_template("gamification.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 03, 2020 at 06:54 AM
+-- Generation Time: Dec 03, 2020 at 02:27 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `2101project`
 --
-CREATE DATABASE IF NOT EXISTS `2101project` DEFAULT CHARACTER SET utf32 COLLATE utf32_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `2101project` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `2101project`;
 
 -- --------------------------------------------------------
@@ -34,9 +34,23 @@ CREATE TABLE IF NOT EXISTS `assessment` (
   `AID` int(11) NOT NULL AUTO_INCREMENT,
   `assessment_name` varchar(100) NOT NULL,
   `MID` int(11) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `weight` float NOT NULL,
   PRIMARY KEY (`AID`),
   KEY `MID` (`MID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `assessment`
+--
+
+INSERT INTO `assessment` (`AID`, `assessment_name`, `MID`, `type`, `weight`) VALUES
+(1, 'Milestone 1', 1, 'Project', 20),
+(2, 'Milestone 2', 1, 'Project', 20),
+(3, 'Milestone 3', 1, 'Project', 30),
+(4, 'Milestone 4', 1, 'Project', 30),
+(5, 'Project 1', 2, 'Project', 50),
+(6, 'Project 2', 2, 'Project', 50);
 
 -- --------------------------------------------------------
 
@@ -46,11 +60,11 @@ CREATE TABLE IF NOT EXISTS `assessment` (
 
 DROP TABLE IF EXISTS `comment`;
 CREATE TABLE IF NOT EXISTS `comment` (
-  `COID` int(7) NOT NULL AUTO_INCREMENT,
+  `COID` int(11) NOT NULL AUTO_INCREMENT,
   `comment` varchar(500) NOT NULL,
-  `sender` int(7) NOT NULL,
-  `receiver` int(7) NOT NULL,
-  `CID` int(7) DEFAULT NULL,
+  `sender` int(11) NOT NULL,
+  `receiver` int(11) NOT NULL,
+  `CID` int(11) DEFAULT NULL,
   PRIMARY KEY (`COID`),
   KEY `sender` (`sender`),
   KEY `receiver` (`receiver`),
@@ -65,13 +79,22 @@ CREATE TABLE IF NOT EXISTS `comment` (
 
 DROP TABLE IF EXISTS `component`;
 CREATE TABLE IF NOT EXISTS `component` (
-  `CID` int(7) NOT NULL AUTO_INCREMENT,
+  `CID` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(500) NOT NULL,
-  `type` varchar(100) NOT NULL,
-  `AID` int(7) NOT NULL,
+  `AID` int(11) NOT NULL,
+  `weight` float NOT NULL,
   PRIMARY KEY (`CID`),
   KEY `AID` (`AID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `component`
+--
+
+INSERT INTO `component` (`CID`, `description`, `AID`, `weight`) VALUES
+(1, 'Report', 1, 30),
+(2, 'Code', 1, 50),
+(3, 'Feedback', 1, 20);
 
 -- --------------------------------------------------------
 
@@ -81,15 +104,14 @@ CREATE TABLE IF NOT EXISTS `component` (
 
 DROP TABLE IF EXISTS `feedback`;
 CREATE TABLE IF NOT EXISTS `feedback` (
-  `FID` int(11) NOT NULL AUTO_INCREMENT,
+  `FID` int(11) NOT NULL,
   `FType` varchar(45) DEFAULT NULL,
   `FTitle` varchar(45) DEFAULT NULL,
   `FContent` varchar(255) DEFAULT NULL,
-  `FSender` int(7) NOT NULL,
-  `FReceiver` int(7) NOT NULL,
-  `FMod_code` int(4) DEFAULT NULL,
-  PRIMARY KEY (`FID`)
-) ENGINE=InnoDB AUTO_INCREMENT=112319 DEFAULT CHARSET=utf8mb4;
+  `FSender` int(11) DEFAULT NULL,
+  `FReceiver` int(11) DEFAULT NULL,
+  `FMod_code` int(4) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `feedback`
@@ -99,8 +121,7 @@ INSERT INTO `feedback` (`FID`, `FType`, `FTitle`, `FContent`, `FSender`, `FRecei
 (1, 'General', 'Good Job', 'Good job on your work', 1001234, 1901000, 1001),
 (2, 'Summative', 'Test', 'Test', 1001234, 1901000, 1001),
 (3, 'Summative', 'Very Good', 'TTEEESSTT', 1001234, 1901001, 1002),
-(4, 'Summative', 'Summative Test', 'Test', 1001234, 1901003, 9999),
-(5, 'Formative', 'Feedback', 'not bad', 1001234, 1901000, 1001);
+(4, 'Summative', 'Summative Test', 'Test', 1001234, 1901003, 9999);
 
 -- --------------------------------------------------------
 
@@ -111,9 +132,9 @@ INSERT INTO `feedback` (`FID`, `FType`, `FTitle`, `FContent`, `FSender`, `FRecei
 DROP TABLE IF EXISTS `module`;
 CREATE TABLE IF NOT EXISTS `module` (
   `MID` int(11) NOT NULL AUTO_INCREMENT,
-  `mod_code` int(4) NOT NULL,
+  `mod_code` int(11) NOT NULL,
   `mod_name` varchar(50) NOT NULL,
-  `UID` int(7) NOT NULL,
+  `UID` int(11) NOT NULL,
   PRIMARY KEY (`MID`),
   KEY `UID` (`UID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
@@ -148,15 +169,24 @@ INSERT INTO `module` (`MID`, `mod_code`, `mod_name`, `UID`) VALUES
 
 DROP TABLE IF EXISTS `result`;
 CREATE TABLE IF NOT EXISTS `result` (
-  `RID` int(7) NOT NULL AUTO_INCREMENT,
-  `UID` int(7) NOT NULL,
-  `marks` int(7) NOT NULL,
-  `CID` int(7) NOT NULL,
+  `RID` int(11) NOT NULL AUTO_INCREMENT,
+  `UID` int(11) NOT NULL,
+  `marks` int(11) NOT NULL,
+  `CID` int(11) NOT NULL,
   PRIMARY KEY (`RID`),
   KEY `CID` (`CID`),
   KEY `UID` (`UID`),
   KEY `CID_2` (`CID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `result`
+--
+
+INSERT INTO `result` (`RID`, `UID`, `marks`, `CID`) VALUES
+(1, 1901000, 40, 1),
+(2, 1901000, 50, 2),
+(3, 1901000, 50, 3);
 
 -- --------------------------------------------------------
 
@@ -166,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `result` (
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `UID` int(7) NOT NULL AUTO_INCREMENT,
+  `UID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `isStudent` tinyint(1) NOT NULL,
   `email` varchar(100) NOT NULL,

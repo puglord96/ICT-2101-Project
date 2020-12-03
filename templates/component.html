@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for component in componentArr %}
+<div>
+        <p> {{ component.getName() }}</p>
+        <p> {{ component.getMark() }}</p>
+</div>
+    {% endfor %}
+{% endblock content %}

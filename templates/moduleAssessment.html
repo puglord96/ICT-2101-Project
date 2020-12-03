@@ -1,10 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div>
-{% for module in moduleArr %}
-    {% if module.getID() == MID %}
-        <p> {{ module.operation() }}</p>
-    {% endif %}
+    <div class="col-md-3"></div>
+    <div class="col-md-9">
+        <h1>Projects</h1>
+    <hr>
+
+{% for assess in assessArr %}
+    {{ % if assess.get% }}
+{#    <a href="/component?AID={{ assess.getID() }}">#}
+        <p> {{ assess.getName() }}</p>
+      <div class="bar learning" data-skill="{{ assess.getName() }}"></div>
+{#</a>#}
     {% endfor %}
     </div>
 {% endblock content %}

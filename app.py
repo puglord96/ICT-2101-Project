@@ -2,16 +2,20 @@
 from flask import Flask, request, render_template, session, flash
 from flask_mysqldb import MySQL, MySQLdb
 from LecturerController import *
+from StudentController import *
 from Module import *
 import AccountController
 
 app = Flask(__name__)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1054f27f59143c3e651565d1768f6c0ddfa51270
 # Database Config
 
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'sceptile101'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_DB'] = '2101project'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -138,7 +142,9 @@ def feedback():
         # data = None
         return render_template('Lfeedback.html', data=data)
     elif session['role'] == 0:
-        return render_template('Sfeedback.html')
+        studcon = StudentController(session['UID'])
+        data = studcon.viewFeedback()
+        return render_template('Sfeedback.html',  data=data)
 
 @app.route('/giveFeedback' ,methods=["POST"])
 def givefeedback():
@@ -167,5 +173,34 @@ def givefeedback():
             return render_template('index.html')
     else:
         return render_template('Sfeedback.html')
+
+@app.route('/viewFeedback' ,methods=["GET"])
+def viewfeedback():
+    if session["role"] == 1:
+        studID = int(request.form["studID"])
+        if request.form["mod_code"] is not "":
+            mod_code = int(request.form["mod_code"])
+        else:
+            #mod code 9999 means no module tagged with this feedback
+            mod_code = 9999
+        ftype = request.form["ftype"]
+        title = request.form["title"]
+        message = request.form["message"]
+        lectID = int(session["UID"])
+
+        lectcon = LecturerController(lectID)
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT fid from feedback ORDER BY fid DESC LIMIT 1;")
+        result = cur.fetchone()
+        lastFID = result['fid'] + 1
+
+        dbresult = lectcon.giveFb(lastFID, ftype, title, message, lectID, studID, mod_code)
+        if dbresult is True:
+            return render_template('gamification.html')
+        else:
+            return render_template('index.html')
+    else:
+        return render_template('Sfeedback.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

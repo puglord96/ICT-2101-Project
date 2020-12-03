@@ -8,10 +8,7 @@ import AccountController
 
 app = Flask(__name__)
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 1054f27f59143c3e651565d1768f6c0ddfa51270
 # Database Config
 
 app.config['MYSQL_USER'] = 'root'

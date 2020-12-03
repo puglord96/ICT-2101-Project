@@ -24,6 +24,22 @@
 
   <body class="text-center">
       <h1>Student View</h1>
+      <table id="myTable">
+      <thead>
+      <tr>
+        <th>UID</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      {% for row in data %}
+      <tr>
+        <td>{{row['FContent']}}</td>
+
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
     {% include 'layout/footer.html' %}
   </body>
 

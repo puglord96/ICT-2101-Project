@@ -34,7 +34,12 @@
 
                 </div>
                 <div class="col">
+                    {% if session['role'] == 1 %}
+                        <a href="/assessment?MID={{ module.getID() - 10 }}">
+                    {% else %}
+
                     <a href="/assessment?MID={{ module.getID() }}">
+                        {% endif %}
                         <p> {{ module.getName() }}</p>
                     </a>
                 </div>
@@ -44,18 +49,7 @@
             </div>
             {% endfor %}
             <br>
-            {% if session['role'] == 1 %}
-            <div class="row">
-                <div class="col col-lg-4">
-                </div>
-                <div class="col">
-                    <a href="/add_assessment"><button class="btn btn-primary">Add Assessment</button></a>
-                    <a href="/add_component"><button class="btn btn-primary">Add Component</button></a>
-                    <button id="upMarksBtn" class="btn btn-primary">Upload Marks</button>
-                </div>
-            </div>
 
-            {% endif %}
 
             <!-- Trigger/Open The Modal -->
 

@@ -48,7 +48,7 @@ def assessment():
     # print(session.get('UID'))
     MID = int(request.args.get('MID'))
     session['MID'] = MID
-    moduleArr = moduleList(session.get('UID')).fetchModules()
+    moduleArr = moduleList("1901000").fetchModules()
     moduleName = moduleList(session.get('UID')).getModuleName(MID)
     assessArr = []
 
@@ -64,7 +64,8 @@ def assessment():
 def component():
     # print(session.get('UID'))
     MID = session['MID']
-    AID = int(request.args.get('AID'))
+    AID = request.args.get('AID')
+    print(AID)
     moduleArr = moduleList(session.get('UID')).fetchModules()
     assessArr = []
     componentArr = []
@@ -72,8 +73,10 @@ def component():
         if module.getID() == MID:
             assessArr = module.getChildrenList()
             for assess in assessArr:
+
                 if assess.getID() == AID:
                     componentArr = assess.getChildrenList()
+
     # for assessment in assessmentArr:
     #     print(assessment)
     return render_template('component.html', componentArr=componentArr, AID=AID)

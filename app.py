@@ -281,6 +281,21 @@ def uploadMarks():
             return render_template("index.html")
     else:
         return render_template("index.html")
+@app.route('/addStuds', methods=['POST', 'GET'])
+def addStudents():
+    if session['role'] == 1:
+        lectID = int(session["UID"])
+        lectcon = LecturerController(lectID)
+        file = request.files["addFile"]
+        addStr = file.read().decode("utf-8-sig")
+
+        result = lectcon.addStudents(addStr)
+        if result is True:
+            return render_template("module.html")
+        else:
+            return render_template("index.html")
+    else:
+        return render_template("index.html")
 
 @app.route('/AllFeed', methods=['POST', 'GET'])
 def LAllfeedback():
@@ -300,7 +315,7 @@ def editFb():
     if session['role']==1:
         lectID = session['UID']
         lectcon = LecturerController(lectID)
-        if request.method== "POST":
+        if request.method == "POST":
 
             ftype = request.form['type']
             ftitle = request.form['title']

@@ -50,6 +50,19 @@
             {% endfor %}
             <br>
 
+            {% if session['role'] == 1 %}
+            <div class="row">
+                <div class="col col-lg-4">
+                </div>
+                <div class="col">
+                    <a href="/add_assessment"><button class="btn btn-primary">Add Assessment</button></a>
+                    <a href="/add_component"><button class="btn btn-primary">Add Component</button></a>
+                    <button id="upMarksBtn" class="btn btn-primary">Upload Marks</button>
+                    <button id="addBtn" class="btn btn-primary">Add Students</button>
+                </div>
+            </div>
+
+
 
             <!-- Trigger/Open The Modal -->
 
@@ -64,6 +77,20 @@
                 <div>
                   <form action="/uploadMarks" method="POST" enctype="multipart/form-data">
                     <input name="marksFile" id="marksFile" type="file" accept=".csv"/>
+                    <input type="submit" value="submit">
+                  </form>
+                </div>
+              </div><br>
+            </div> <!-- Modal Closing Tag -->
+                        <!-- The Modal -->
+            <div id="addStuds" class="row modal">
+
+              <!-- Modal content -->
+              <div class="modal-content">
+                <p>Add your students here. (.csv only)</p>
+                <div>
+                  <form action="/addStuds" method="POST" enctype="multipart/form-data">
+                    <input name="addFile" id="addFile" type="file" accept=".csv"/>
                     <input type="submit" value="submit">
                   </form>
                 </div>
@@ -96,6 +123,30 @@
      window.onclick = function(event) {
         if (event.target == mModal) {
           mModal.style.display = "none";
+        }
+    }
+</script>
+<script>
+    // Add Students MODAL
+    var aModal = document.getElementById("addStuds");
+
+    // Get the button that opens the modal
+    var aBtn = document.getElementById("addBtn");
+
+    // Get the <span> element that closes the modal
+    var aSpan = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    aBtn.onclick = function() {
+        aModal.style.display = "block";
+      }
+     // When the user clicks anywhere outside of the modal, close it
+     window.onclick = function(event) {
+        if (event.target == mModal) {
+          mModal.style.display = "none";
+        }
+        if (event.target == aModal) {
+          aModal.style.display = "none";
         }
     }
 </script>

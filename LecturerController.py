@@ -87,7 +87,26 @@ class LecturerController:
         except Exception as e:
             # print("Problem in: " + str(e))
             return False
+    def addStudents(self, csvString):
+        cur = mysql.connection.cursor()
+        list = csvString.split('\n')
 
+        try:
+            for entry in list:
+                part = entry.split(',')
+                value = []
+                for small in part:
+                    value.append(small)
+                    print(value)
+                sql = "INSERT INTO module (mod_code, mod_name, UID) VALUES(%s,%s,%s)"
+                cur.execute(sql, value)
+                mysql.connection.commit()
+            return True
+        except Exception as e:
+            print("Problem in: " + str(e))
+            return False
+
+        pass
     def getAllFeedbacks(self, type="all"):
         cur = mysql.connection.cursor()
         if type =="all":

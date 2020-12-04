@@ -37,10 +37,12 @@ def home():
 
 @app.route('/module')
 def module():
-    print(session.get('UID'))
-    moduleArr = moduleList(session.get('UID')).fetchModules()
-    # for module in moduleArr:
-    #     print(module)
+    if session['role'] == 1:
+        moduleArr = moduleList(session.get('UID')).fetchModules()
+    else:
+        studID = session['UID']
+        studcon = StudentController(studID)
+        moduleArr = studcon.viewModule("code")
     return render_template('module.html', moduleArr=moduleArr)
 
 @app.route('/assessment',methods=["GET"])
@@ -48,8 +50,14 @@ def assessment():
     # print(session.get('UID'))
     MID = int(request.args.get('MID'))
     session['MID'] = MID
-    moduleArr = moduleList("1901000").fetchModules()
-    moduleName = moduleList(session.get('UID')).getModuleName(MID)
+    if session['role'] == 0:
+        studID = session['UID']
+        studcon = StudentController(studID)
+        moduleArr = studcon.viewModule("code")
+        moduleName = studcon.viewModule("name", MID)
+    else:
+        moduleArr = moduleList(session['UID']).fetchModules()
+        moduleName = moduleList(session.get('UID')).getModuleName(MID)
     assessArr = []
 
     for module in moduleArr:
@@ -102,27 +110,6 @@ def authenticate():
         else:   # Authenticate fail
             flash('Admin Number does not exist!')
             return render_template('authenticate.html')
-
-    #     uid = request.form['uid']
-    #     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    #     cur.execute("SELECT * FROM user WHERE UID=" + uid)
-    #     user = cur.fetchone()
-    #     cur.close()
-    #
-    # if not user:
-    #     # Authenticate fail
-    #     flash('Admin Number does not exist!')
-    #     return render_template('authenticate.html')
-    #
-    #
-    # session['UID'] = str(user['UID'])
-    # session['name'] = str(user['name'])
-    # if user['isStudent'] == 0:
-    #     session['role'] = 1     # Lecturer
-    # else:
-    #     session['role'] = 0     # Student
-    # return render_template('index.html')
-
 
 @app.route('/logout')
 def logout():

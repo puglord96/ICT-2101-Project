@@ -24,32 +24,37 @@
   </head>
 
     <body>
-        <div class="container">
+        <div class="container" style="">
 
-            <H1> Modules </H1>
+            <H1><center> Modules </center></H1><br>
+
             {% for module in moduleArr %}
             <div class="row">
-            </div>
-            <div class="row">
-                <a href="/assessment?MID={{ module.getID() }}">
-                    <p> {{ module.getName() }}</p>
-                </a>
+                <div class="col col-lg-4">
+
+                </div>
+                <div class="col">
+                    <a href="/assessment?MID={{ module.getID() }}">
+                        <p> {{ module.getName() }}</p>
+                    </a>
+                </div>
+                <div class="col col-lg-2">
+
+                </div>
             </div>
             {% endfor %}
-
+            <br>
             {% if session['role'] == 1 %}
             <div class="row">
-                <a href="/add_assessment"><button class="btn btn-primary">Add Assessment</button></a>
+                <div class="col col-lg-4">
+                </div>
+                <div class="col">
+                    <a href="/add_assessment"><button class="btn btn-primary">Add Assessment</button></a>
+                    <a href="/add_component"><button class="btn btn-primary">Add Component</button></a>
+                    <button id="upMarksBtn" class="btn btn-primary">Upload Marks</button>
+                </div>
             </div>
-            <br>
-            <div class="row">
-                <a href="/add_component"><button class="btn btn-primary">Add Component</button></a>
-            </div>
-            <br>
-            <div class="row">
-                <button id="upMarksBtn" class="btn btn-primary">Upload Marks</button>
-            </div>
-            <div class="col col-lg-6">
+
             {% endif %}
 
             <!-- Trigger/Open The Modal -->
